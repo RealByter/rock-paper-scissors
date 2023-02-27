@@ -48,6 +48,12 @@ function playRound(playerSelection, computerSelection) {
 	return result;
 }
 
-const playerSelection = 'rock';
-const computerSelection = getComputerChoice();
-console.log(playRound(playerSelection, computerSelection));
+function game() {
+	for (let i = 0; i < 5; i++) {
+		const playerSelection = prompt('Choose your hand');
+		const computerSelection = getComputerChoice();
+		console.log(playRound(playerSelection, computerSelection));
+	}
+}
+
+game();
