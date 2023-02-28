@@ -1,6 +1,15 @@
+function handleOptionClick(e) {
+	playRound(e.target.value);
+}
+
 const result = document.querySelector('.result');
-const playerScore = document.querySelector('.player-score');
-const computerScore = document.querySelector('.computer-score');
+const playerScoreElement = document.querySelector('.player-score');
+const computerScoreElement = document.querySelector('.computer-score');
+const options = document.querySelectorAll('.option');
+let playerScore = 0;
+let computerScore = 0;
+
+reset();
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
@@ -27,38 +36,85 @@ function playRound(playerSelection) {
 			result.textContent = "Tie! Rock doesn't beat Rock";
 		} else if (computerSelection == 'paper') {
 			result.textContent = 'You Lose! Paper beats Rock';
-			computerScore.textContent = +computerScore.textContent + 1;
+			computerScore++;
 		} else {
 			result.textContent = 'You Win! Rock beats Paper';
-			playerScore.textContent = +playerScore.textContent + 1;
+			playerScore++;
 		}
 	} else if (playerSelection == 'paper') {
 		if (computerSelection == 'paper') {
 			result.textContent = "Tie! Paper doesn't beat Paper";
 		} else if (computerSelection == 'scissors') {
 			result.textContent = 'You Lose! Scissors beats Paper';
-			computerScore.textContent = +computerScore.textContent + 1;
+			computerScore++;
 		} else {
 			result.textContent = 'You Win! Paper beats Rock';
-			playerScore.textContent = +playerScore.textContent + 1;
+			playerScore++;
 		}
 	} else {
 		if (computerSelection == 'scissors') {
 			result.textContent = "Tie! Scissors doesn't beat Scissors";
 		} else if (computerSelection == 'rock') {
 			result.textContent = 'You Lose! Rock beats Scissors';
-			computerScore.textContent = +computerScore.textContent + 1;
+			computerScore++;
 		} else {
 			result.textContent = 'You Win! Scissors beats Paper';
-			playerScore.textContent = +playerScore.textContent + 1;
+			playerScore++;
 		}
+	}
+
+	computerScoreElement.textContent = computerScore;
+	playerScoreElement.textContent = playerScore;
+
+	if (playerScore >= 5) {
+		endGame(true);
+	} else if (computerScore >= 5) {
+		endGame(false);
 	}
 }
 
-const options = document.querySelectorAll('.option');
-console.log(options);
-options.forEach(option => {
-	option.addEventListener('click', e => {
-		playRound(e.target.value);
+function endGame(playerWon) {
+	const winMessage = document.createElement('h3');
+
+	winMessage.id = 'win-message';
+	if (playerWon) {
+		winMessage.textContent = 'Congratulations! You won!';
+	} else {
+		winMessage.textContent = 'Game Over! The computer won';
+	}
+
+	const restart = document.createElement('button');
+	restart.textContent = 'Restart';
+	restart.id = 'restart';
+	restart.addEventListener('click', reset);
+
+	const body = document.querySelector('body');
+	body.appendChild(winMessage);
+	body.appendChild(restart);
+
+	options.forEach(option => {
+		option.disabled = true;
+		option.removeEventListener('click', handleOptionClick);
 	});
-});
+}
+
+function reset() {
+	playerScore = 0;
+	computerScore = 0;
+	playerScoreElement.textContent = '0';
+	computerScoreElement.textContent = '0';
+
+	options.forEach(option => {
+		option.disabled = false;
+		option.addEventListener('click', handleOptionClick);
+	});
+
+	const winMessage = document.querySelector('#win-message');
+	if (winMessage) {
+		winMessage.remove();
+	}
+	const restart = document.querySelector('#restart');
+	if (restart) {
+		restart.remove();
+	}
+}
