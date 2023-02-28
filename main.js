@@ -1,3 +1,7 @@
+const result = document.querySelector('.result');
+const playerScore = document.querySelector('.player-score');
+const computerScore = document.querySelector('.computer-score');
+
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
@@ -15,36 +19,46 @@ function getComputerChoice() {
 	}
 }
 
-function playRound(playerSelection, computerSelection) {
-	let result = '';
-	playerSelection = playerSelection.toLowerCase();
+function playRound(playerSelection) {
+	const computerSelection = getComputerChoice();
 
 	if (playerSelection == 'rock') {
 		if (computerSelection == 'rock') {
-			result = "Tie! Rock doesn't beat Rock";
+			result.textContent = "Tie! Rock doesn't beat Rock";
 		} else if (computerSelection == 'paper') {
-			result = 'You Lose! Paper beats Rock';
+			result.textContent = 'You Lose! Paper beats Rock';
+			computerScore.textContent = +computerScore.textContent + 1;
 		} else {
-			result = 'You Win! Rock beats Paper';
+			result.textContent = 'You Win! Rock beats Paper';
+			playerScore.textContent = +playerScore.textContent + 1;
 		}
 	} else if (playerSelection == 'paper') {
 		if (computerSelection == 'paper') {
-			result = "Tie! Paper doesn't beat Paper";
+			result.textContent = "Tie! Paper doesn't beat Paper";
 		} else if (computerSelection == 'scissors') {
-			result = 'You Lose! Scissors beats Paper';
+			result.textContent = 'You Lose! Scissors beats Paper';
+			computerScore.textContent = +computerScore.textContent + 1;
 		} else {
-			result = 'You Win! Paper beats Rock';
+			result.textContent = 'You Win! Paper beats Rock';
+			playerScore.textContent = +playerScore.textContent + 1;
 		}
 	} else {
 		if (computerSelection == 'scissors') {
-			result = "Tie! Scissors doesn't beat Scissors";
+			result.textContent = "Tie! Scissors doesn't beat Scissors";
 		} else if (computerSelection == 'rock') {
-			result = 'You Lose! Rock beats Scissors';
+			result.textContent = 'You Lose! Rock beats Scissors';
+			computerScore.textContent = +computerScore.textContent + 1;
 		} else {
-			result = 'You Win! Scissors beats Paper';
+			result.textContent = 'You Win! Scissors beats Paper';
+			playerScore.textContent = +playerScore.textContent + 1;
 		}
 	}
-
-	return result;
 }
 
+const options = document.querySelectorAll('.option');
+console.log(options);
+options.forEach(option => {
+	option.addEventListener('click', e => {
+		playRound(e.target.value);
+	});
+});
